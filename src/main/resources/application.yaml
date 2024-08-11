@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: portfolio
+  jpa:
+    database: mysql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+        ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:4444/portfolio?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: Amadeus1
+    driver-class-name: com.mysql.cj.jdbc.Driver
