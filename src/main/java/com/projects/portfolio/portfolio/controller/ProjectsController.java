@@ -1,9 +1,10 @@
 package com.projects.portfolio.portfolio.controller;
 
 import com.projects.portfolio.portfolio.models.Project;
-import com.projects.portfolio.portfolio.models.dao.ResponseEntityDAO;
+import com.projects.portfolio.portfolio.models.dto.ResponseEntityDTO;
 import com.projects.portfolio.portfolio.services.ProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,19 @@ public class ProjectsController {
    ProjectsService projectsService;
 
    @GetMapping
-   public ResponseEntityDAO<List<Project>> getProjects() {
-      return new ResponseEntityDAO<>("Projects retrieved successfully", 200, projectsService.getProjects());
+   public ResponseEntityDTO<List<Project>> getProjects() {
+      return new ResponseEntityDTO<>(
+         "Projects retrieved successfully",
+         HttpStatus.OK.value(),
+         projectsService.getProjects());
    }
 
    @PostMapping
-   public ResponseEntityDAO<Project> saveProject(@Validated @RequestBody Project project) {
-      return new ResponseEntityDAO<>("Project saved successfully", 200, projectsService.saveProject(project));
+   public ResponseEntityDTO<Project> saveProject(@Validated @RequestBody Project project) {
+      return new ResponseEntityDTO<>(
+         "Project saved successfully",
+         HttpStatus.OK.value(),
+         projectsService.saveProject(project));
    }
 
 }
