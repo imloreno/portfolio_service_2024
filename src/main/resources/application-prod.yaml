@@ -1,7 +1,7 @@
 environment:
   name: PROD
 server:
-  port : 8000
+  port : 1998
 spring:
   datasource:
     url: ${DATABASE_URL}
