@@ -1,16 +1,15 @@
 package com.projects.portfolio.portfolio.models.dto;
 
-import com.projects.portfolio.portfolio.models.Project;
-import jakarta.persistence.Column;
+import com.projects.portfolio.portfolio.models.Skills;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class ProjectWithDetailsDTO extends Project {
+public class ProjectWithDetailsDTO {
    private UUID id;
    private String name;
    private String position;
@@ -19,8 +18,9 @@ public class ProjectWithDetailsDTO extends Project {
    private Date to;
    private String picture;
 
-   private UUID detailsId;
    private String description;
    private String github;
    private String link;
+
+   private List<Skills> skills = new ArrayList<>();
 }

@@ -28,7 +28,7 @@ public class FileHandlerController {
    @Value("${files.base-dir}")
    private String baseDir;
 
-   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+   @PostMapping
    public void uploadFile(@Validated @RequestParam("custom_file") MultipartFile file) throws IOException {
       File convertedFile = FileHandlers.convertMultipartFileToFile(file);
       storageAdapter.uploadFile(convertedFile, "picture.jpg", baseDir.concat(FileCons.IMAGES_PATH));
