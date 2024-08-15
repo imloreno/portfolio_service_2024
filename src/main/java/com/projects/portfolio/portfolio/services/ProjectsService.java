@@ -1,6 +1,7 @@
 package com.projects.portfolio.portfolio.services;
 
 import com.projects.portfolio.portfolio.models.Project;
+import com.projects.portfolio.portfolio.repository.ProjectDetailsRepository;
 import com.projects.portfolio.portfolio.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ public class ProjectsService {
 
    @Autowired
    ProjectRepository projectRepository;
+
+   @Autowired
+   ProjectDetailsRepository projectDetailsRepository;
 
    public List<Project> getProjects() {
       return projectRepository.findAll();

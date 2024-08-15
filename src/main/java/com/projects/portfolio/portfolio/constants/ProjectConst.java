@@ -1,7 +1,7 @@
 package com.projects.portfolio.portfolio.constants;
 
 public final class ProjectConst {
-   public static enum Skills {
+   public enum Skills {
       JAVA,
       SPRING,
       SPRING_BOOT,
@@ -37,14 +37,33 @@ public final class ProjectConst {
       VS_CODE,
       GIT,
       GITHUB,
+      BITBUCKET
    }
 
-   public static enum SkillCategory {
+   public enum SkillCategory {
       BACKEND,
       FRONTEND,
       DEVOPS,
       TOOLS,
-      METHODOLOGIES,
+      REPOSITORY,
+   }
+
+   public static boolean containsSkill(String skill) {
+      for (Skills s : Skills.values()) {
+         if (s.toString().equals(skill)) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   public static boolean containsSkillCategory(String category) {
+      for (SkillCategory s : SkillCategory.values()) {
+         if (s.toString().equals(category)) {
+            return true;
+         }
+      }
+      return false;
    }
 }
 

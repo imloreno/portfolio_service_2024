@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,13 +17,11 @@ public class Skills implements Serializable {
    private UUID id;
    @Column(unique = true, length = 20, nullable = false)
    private String name;
-   @Column(name = "started_from", columnDefinition = "DATE", nullable = false)
-   private Date from;
-   @Column(name = "terminated_at", columnDefinition = "DATE")
-   private Date to;
+   @Column(name = "years_of_experience", nullable = false, length = 2)
+   private Integer yearsOfExperience;
    @Column(length = 20, nullable = false)
    private String category;
 
    @ManyToMany(mappedBy = "skills")
-   Set<Project> projects;
+   Set<Project> projects = new HashSet<>();
 }
