@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -12,9 +13,13 @@ import java.util.UUID;
 public class Skills implements Serializable {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
-   @Column(name = "id")
    private UUID id;
-
    @Column(unique = true, length = 20, nullable = false)
-   private String skill;
+   private String name;
+   @Column(name = "started_from", columnDefinition = "DATE", nullable = false)
+   private Date from;
+   @Column(name = "terminated_at", columnDefinition = "DATE")
+   private Date to;
+   @Column(length = 20, nullable = false)
+   private String category;
 }
