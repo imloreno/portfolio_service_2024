@@ -5,6 +5,7 @@ import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAd
 import com.projects.portfolio.portfolio.services.storage_dapter.utils.FileHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+@Profile("DEV")
 @RestController
 @RequestMapping("api/v1/file")
 public class FileHandlerController {
