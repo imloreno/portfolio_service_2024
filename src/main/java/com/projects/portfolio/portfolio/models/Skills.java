@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -22,4 +23,7 @@ public class Skills implements Serializable {
    private Date to;
    @Column(length = 20, nullable = false)
    private String category;
+
+   @ManyToMany(mappedBy = "skills")
+   Set<Project> projects;
 }

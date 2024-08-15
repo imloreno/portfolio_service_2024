@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -31,4 +32,11 @@ public class Project implements Serializable {
    @OneToOne(mappedBy = "projects", cascade = CascadeType.ALL)
    @PrimaryKeyJoinColumn
    private ProjectDetails projectDetails;
+
+   @ManyToMany
+   @JoinTable(
+      name = "project_skills",
+      joinColumns = @JoinColumn(name = "projects_id"),
+      inverseJoinColumns = @JoinColumn(name = "skills_id"))
+   Set<Skills> skills;
 }
