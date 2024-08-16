@@ -1,6 +1,5 @@
 package com.projects.portfolio.portfolio.models.dto;
 
-import com.projects.portfolio.portfolio.models.Skills;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -22,5 +21,5 @@ public class ProjectWithDetailsDTO {
    private String github;
    private String link;
 
-   private List<Skills> skills = new ArrayList<>();
+   private List<String> skills = new ArrayList<>();
 }

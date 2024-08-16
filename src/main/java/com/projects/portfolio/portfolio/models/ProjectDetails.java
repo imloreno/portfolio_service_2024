@@ -15,7 +15,7 @@ public class ProjectDetails {
    private UUID id;
    @Column(columnDefinition = "TEXT")
    private String description;
-   @Column(length = 50)
+   @Column(length = 70)
    private String github;
    @Column(length = 70)
    private String link;

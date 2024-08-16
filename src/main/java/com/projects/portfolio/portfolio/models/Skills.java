@@ -2,6 +2,7 @@ package com.projects.portfolio.portfolio.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "projects")
 @Table(name = "skills")
 public class Skills implements Serializable {
    @Id

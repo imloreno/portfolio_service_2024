@@ -37,7 +37,11 @@ public final class ProjectConst {
       VS_CODE,
       GIT,
       GITHUB,
-      BITBUCKET
+      BITBUCKET,
+      MVC,
+      BEM,
+      REDUX,
+      PHP
    }
 
    public enum SkillCategory {
@@ -46,6 +50,7 @@ public final class ProjectConst {
       DEVOPS,
       TOOLS,
       REPOSITORY,
+      METHODOLOGIES
    }
 
    public static boolean containsSkill(String skill) {

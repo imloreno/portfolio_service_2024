@@ -1,18 +1,13 @@
 package com.projects.portfolio.portfolio.controller;
 
-import com.projects.portfolio.portfolio.constants.FileCons;
 import com.projects.portfolio.portfolio.models.Project;
 import com.projects.portfolio.portfolio.models.dto.ProjectWithDetailsDTO;
 import com.projects.portfolio.portfolio.models.dto.ResponseEntityDTO;
 import com.projects.portfolio.portfolio.services.ProjectsService;
-import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAdapter;
-import com.projects.portfolio.portfolio.services.storage_dapter.utils.FileHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

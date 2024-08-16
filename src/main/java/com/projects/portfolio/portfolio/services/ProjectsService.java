@@ -1,11 +1,14 @@
 package com.projects.portfolio.portfolio.services;
 
 import com.projects.portfolio.portfolio.constants.FileCons;
+import com.projects.portfolio.portfolio.constants.ProjectConst;
 import com.projects.portfolio.portfolio.models.Project;
 import com.projects.portfolio.portfolio.models.ProjectDetails;
+import com.projects.portfolio.portfolio.models.Skills;
 import com.projects.portfolio.portfolio.models.dto.ProjectWithDetailsDTO;
 import com.projects.portfolio.portfolio.repository.ProjectDetailsRepository;
 import com.projects.portfolio.portfolio.repository.ProjectRepository;
+import com.projects.portfolio.portfolio.repository.SkillsRepository;
 import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAdapter;
 import com.projects.portfolio.portfolio.services.storage_dapter.utils.FileHandlers;
 import jakarta.transaction.Transactional;
@@ -17,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProjectsService {
@@ -27,6 +32,9 @@ public class ProjectsService {
 
    @Autowired
    ProjectDetailsRepository projectDetailsRepository;
+
+   @Autowired
+   SkillsRepository skillsRepository;
 
    @Autowired
    StorageAdapter storageAdapter;
@@ -45,6 +53,7 @@ public class ProjectsService {
       project.setType(projectWithDetails.getType());
       project.setFrom(projectWithDetails.getFrom());
       project.setTo(projectWithDetails.getTo());
+      project.setSkills(validateSkills(projectWithDetails.getSkills()));
 
       try {
          // Save the project in the database
@@ -127,5 +136,23 @@ public class ProjectsService {
       }
 
       return fullPath.concat(file.getName());
+   }
+
+   @Transactional
+   private Set<Skills> validateSkills(List<String> skills) {
+      Set<Skills> validSkills = new HashSet<>();
+
+      // Check if the skills are valid
+      for (String skill : skills) {
+         if (!skill.isEmpty() || ProjectConst.containsSkill(skill)) {
+            // Find a skill by name and add it to the list
+            Skills tempSkill = skillsRepository.findByName(skill);
+            if (tempSkill != null) {
+               validSkills.add(tempSkill);
+            }
+         }
+      }
+
+      return validSkills;
    }
 }

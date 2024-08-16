@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "skills")
 @Table(name = "projects")
 public class Project implements Serializable {
    @Id
@@ -20,7 +21,7 @@ public class Project implements Serializable {
    private String name;
    @Column(length = 100, nullable = false)
    private String position;
-   @Column(length = 20)
+   @Column(length = 25)
    private String type;
    @Column(name = "started_from", columnDefinition = "DATE", nullable = false)
    private Date from;
