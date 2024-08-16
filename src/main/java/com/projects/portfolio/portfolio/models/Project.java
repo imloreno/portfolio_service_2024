@@ -1,5 +1,7 @@
 package com.projects.portfolio.portfolio.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,11 +32,12 @@ public class Project implements Serializable {
    @Column(length = 250)
    private String picture;
 
-   @OneToOne(mappedBy = "projects", cascade = CascadeType.ALL)
+   @OneToOne(mappedBy = "projects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    @PrimaryKeyJoinColumn
+   @JsonIgnore
    private ProjectDetails projectDetails;
 
-   @ManyToMany
+   @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(
       name = "project_skills",
       joinColumns = @JoinColumn(name = "projects_id"),

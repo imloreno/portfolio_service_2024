@@ -1,5 +1,6 @@
 package com.projects.portfolio.portfolio.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,5 +24,6 @@ public class ProjectDetails {
    @OneToOne
    @MapsId
    @JoinColumn(name = "project_id")
+   @JsonIgnore
    private Project projects;
 }

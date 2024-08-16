@@ -1,5 +1,6 @@
 package com.projects.portfolio.portfolio.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,5 +26,6 @@ public class Skills implements Serializable {
    private String category;
 
    @ManyToMany(mappedBy = "skills")
+   @JsonIgnore
    Set<Project> projects = new HashSet<>();
 }
