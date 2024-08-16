@@ -41,7 +41,8 @@ public final class ProjectConst {
       MVC,
       BEM,
       REDUX,
-      PHP
+      PHP,
+      SVELTE
    }
 
    public enum SkillCategory {
