@@ -15,14 +15,13 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ProjectsService {
@@ -38,6 +37,9 @@ public class ProjectsService {
 
    @Autowired
    StorageAdapter storageAdapter;
+
+   @Value("${files.base-dir}")
+   private String baseDir;
 
    Logger logger = LoggerFactory.getLogger(ProjectsService.class);
 
@@ -120,22 +122,36 @@ public class ProjectsService {
       return projectWithDetails;
    }
 
+   @Transactional
    public String savePicture(MultipartFile file, String projectId) throws IOException {
       // Converting the MultipartFile to a File
       File fileConverted = FileHandlers.convertMultipartFileToFile(file);
 
-      String fullPath = FileCons.PROJECTS_PATH
-         .concat(projectId)
-         .concat(FileCons.IMAGES_PATH);
+      // Define the relative path
+      String relativePath = FileCons.PROJECTS_PATH.concat(projectId).concat("/").concat(FileCons.IMAGES_PATH);
 
+      // Define the target project
+      Optional<Project> targetProject;
+
+      // Save the file to the file system and update the Project picture attribute
       try {
          // Saving the file to the file system
-         storageAdapter.uploadFile(fileConverted, file.getName(), fullPath);
+         storageAdapter.uploadFile(fileConverted, file.getOriginalFilename(), baseDir.concat(relativePath));
+
+         // After saving the file, update the project picture attribute
+         targetProject = projectRepository.findById(UUID.fromString(projectId));
+         if (targetProject.isPresent()) {
+            targetProject.get().setPicture(relativePath.concat(
+               Objects.requireNonNull(file.getOriginalFilename())
+            ));
+            projectRepository.save(targetProject.get());
+         }
+
       } catch (Exception e) {
          throw new RuntimeException("Error saving the picture");
       }
 
-      return fullPath.concat(file.getName());
+      return targetProject.get().getPicture();
    }
 
    @Transactional

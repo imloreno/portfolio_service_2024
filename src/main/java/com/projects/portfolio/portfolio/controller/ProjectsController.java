@@ -7,6 +7,7 @@ import com.projects.portfolio.portfolio.models.dto.ResponseEntityDTO;
 import com.projects.portfolio.portfolio.services.ProjectDetailsService;
 import com.projects.portfolio.portfolio.services.ProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,8 @@ public class ProjectsController {
          projectDetails);
    }
 
+
+   @Profile("DEV")
    @PostMapping
    public ResponseEntityDTO<ProjectWithDetailsDTO> saveProject(@Validated @RequestBody ProjectWithDetailsDTO projectWithDetails) {
       ProjectWithDetailsDTO projectWithDetailsDTO;
