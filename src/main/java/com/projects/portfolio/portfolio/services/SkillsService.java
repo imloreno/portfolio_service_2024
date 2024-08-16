@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SkillsService {
 
@@ -15,6 +17,10 @@ public class SkillsService {
    SkillsRepository skillsRepository;
 
    Logger logger = LoggerFactory.getLogger(SkillsService.class);
+
+   public List<Skills> getSkills() {
+      return skillsRepository.findAll();
+   }
 
    public Skills addSkills(Skills skills) {
 
