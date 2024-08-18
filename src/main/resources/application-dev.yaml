@@ -4,7 +4,7 @@ server:
   port : 8000
 spring:
   datasource:
-    url: jdbc:mysql://localhost:4444/portfolio?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:4444/portfolio?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowMultiQueries=true
     username: root
     password: Amadeus1
   jpa:
