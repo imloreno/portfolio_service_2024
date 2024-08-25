@@ -4,6 +4,8 @@ import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAd
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -40,8 +42,17 @@ public class Local implements StorageAdapter {
    }
 
    @Override
-   public File getFile(String fileName, String path) throws IOException {
-      return null;
+   public Resource getInputStream(String path) throws IOException {
+      // Define the path to the image
+      Path url = Paths.get(path);
+      Resource resource = new UrlResource(url.toUri());
+
+      // Check if the image exists
+      if (!resource.exists()) {
+         throw new IOException("File not found");
+      }
+
+      return resource;
    }
 
    @Override

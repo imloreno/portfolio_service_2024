@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -49,33 +50,12 @@ public class S3 implements StorageAdapter {
    }
 
    @Override
-   public File getFile(String fileName, String path) throws IOException {
-      String fullPath = path.concat(fileName);
-      S3Object s3Object = s3Client.getObject(bucketName, fullPath); // Get the S3 object
-      S3ObjectInputStream inputStream = s3Object.getObjectContent(); // Get the S3 object content
-
-      // Create a temporary file
-      File file = File.createTempFile("s3_", "_file");
-
-      try (FileOutputStream outputStream = new FileOutputStream(file)) {
-         byte[] buffer = new byte[4096];
-         int bytesRead;
-
-         // Read from S3 object and write to file
-         while ((bytesRead = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, bytesRead);
-         }
-      } finally {
-         // Close the input stream
-         inputStream.close();
-         s3Object.close();
-      }
-
-      return file;
+   public boolean deleteFile(String fileName, String path) {
+      return false;
    }
 
    @Override
-   public boolean deleteFile(String fileName, String path) {
-      return false;
+   public Resource getInputStream(String path) throws IOException {
+      return null;
    }
 }

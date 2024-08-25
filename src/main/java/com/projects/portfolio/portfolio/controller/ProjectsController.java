@@ -8,10 +8,13 @@ import com.projects.portfolio.portfolio.services.ProjectDetailsService;
 import com.projects.portfolio.portfolio.services.ProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +56,10 @@ public class ProjectsController {
          projectDetails);
    }
 
+   @GetMapping(value = "/details/{id}/profile", produces = MediaType.IMAGE_JPEG_VALUE)
+   public Resource getProfileImage(@PathVariable UUID id) throws IOException {
+      return projectsService.getProfileImage(id);
+   }
 
    @Profile("DEV")
    @PostMapping

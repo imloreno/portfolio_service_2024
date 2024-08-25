@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -152,6 +153,23 @@ public class ProjectsService {
       }
 
       return targetProject.get().getPicture();
+   }
+
+   public Resource getProfileImage(UUID id) throws IOException {
+
+      // Check if the project exists
+      Project project = projectRepository.findById(id)
+         .orElseThrow(() -> new RuntimeException("Project ID not valid: ".concat(id.toString())));
+
+      // Define the path to the image
+      String path = baseDir.concat(project.getPicture());
+      Resource resource = storageAdapter.getInputStream(path);
+
+      if (resource == null) {
+         throw new RuntimeException("Image not found");
+      }
+
+      return resource;
    }
 
    @Transactional
