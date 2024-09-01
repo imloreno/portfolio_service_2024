@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
@@ -48,5 +49,21 @@ public class FileHandlerController {
          "Profile picture uploaded successfully",
          200,
          picUploaded);
+   }
+
+   @PostMapping("/uploadFiles")
+   public String uploadFiles(@RequestParam("files") MultipartFile[] files) {
+
+      Arrays.asList(files)
+         .stream()
+         .forEach(file -> {
+            try {
+               projectsService.savePicture(file, "uuid");
+            } catch (IOException e) {
+               throw new RuntimeException(e);
+            }
+         });
+
+      return "redirect:/";
    }
 }

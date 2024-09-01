@@ -42,4 +42,7 @@ public class Project implements Serializable {
       joinColumns = @JoinColumn(name = "projects_id"),
       inverseJoinColumns = @JoinColumn(name = "skills_id"))
    Set<Skills> skills;
+
+   @OneToMany(mappedBy="project")
+   private Set<ProjectGallery> gallery;
 }

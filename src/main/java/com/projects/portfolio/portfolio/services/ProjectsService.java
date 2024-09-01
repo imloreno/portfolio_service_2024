@@ -155,6 +155,42 @@ public class ProjectsService {
       return targetProject.get().getPicture();
    }
 
+   @Transactional
+   public String saveToGallery(MultipartFile file, String projectId) throws IOException {
+      // Converting the MultipartFile to a File
+      File fileConverted = FileHandlers.convertMultipartFileToFile(file);
+
+      // Define the relative path
+      String relativePath = FileCons.PROJECTS_PATH
+         .concat(projectId)
+         .concat("/")
+         .concat(FileCons.IMAGES_PATH)
+         .concat(FileCons.GALLERY_PATH);
+
+      // Define the target project
+      Optional<Project> targetProject;
+
+      // Save the file to the file system and update the Project picture attribute
+      try {
+         // Saving the file to the file system
+         storageAdapter.uploadFile(fileConverted, file.getOriginalFilename(), baseDir.concat(relativePath));
+
+         // After saving the file, update the project picture attribute
+         targetProject = projectRepository.findById(UUID.fromString(projectId));
+         if (targetProject.isPresent()) {
+            targetProject.get().setPicture(relativePath.concat(
+               Objects.requireNonNull(file.getOriginalFilename())
+            ));
+            projectRepository.save(targetProject.get());
+         }
+
+      } catch (Exception e) {
+         throw new RuntimeException("Error saving the picture");
+      }
+
+      return targetProject.get().getPicture();
+   }
+
    public Resource getProfileImage(UUID id) throws IOException {
 
       // Check if the project exists
