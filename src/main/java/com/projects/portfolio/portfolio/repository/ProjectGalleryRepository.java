@@ -1,6 +1,5 @@
 package com.projects.portfolio.portfolio.repository;
 
-import com.projects.portfolio.portfolio.models.ProjectDetails;
 import com.projects.portfolio.portfolio.models.ProjectGallery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

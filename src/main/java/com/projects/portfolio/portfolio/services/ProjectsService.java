@@ -161,11 +161,8 @@ public class ProjectsService {
       File fileConverted = FileHandlers.convertMultipartFileToFile(file);
 
       // Define the relative path
-      String relativePath = FileCons.PROJECTS_PATH
-         .concat(projectId)
-         .concat("/")
-         .concat(FileCons.IMAGES_PATH)
-         .concat(FileCons.GALLERY_PATH);
+      String relativePath = FileCons.GALLERY_FULL_PATH
+         .replace(FileCons.ID_SUFIX, projectId.toString());
 
       // Define the target project
       Optional<Project> targetProject;

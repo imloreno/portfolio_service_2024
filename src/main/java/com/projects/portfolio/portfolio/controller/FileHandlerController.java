@@ -1,7 +1,9 @@
 package com.projects.portfolio.portfolio.controller;
 
 import com.projects.portfolio.portfolio.constants.FileCons;
+import com.projects.portfolio.portfolio.models.Project;
 import com.projects.portfolio.portfolio.models.dto.ResponseEntityDTO;
+import com.projects.portfolio.portfolio.repository.ProjectRepository;
 import com.projects.portfolio.portfolio.services.ProjectsService;
 import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAdapter;
 import com.projects.portfolio.portfolio.services.storage_dapter.utils.FileHandlers;
@@ -30,6 +32,9 @@ public class FileHandlerController {
    @Autowired
    ProjectsService projectsService;
 
+   @Autowired
+   ProjectRepository projectRepository;
+
    @Value("${files.base-dir}")
    private String baseDir;
 
@@ -51,14 +56,13 @@ public class FileHandlerController {
          picUploaded);
    }
 
-   @PostMapping("/uploadFiles")
-   public String uploadFiles(@RequestParam("files") MultipartFile[] files) {
+   @PostMapping("/uploadFiles/{projectId}")
+   public String uploadFiles(@RequestParam("files") MultipartFile[] files, @RequestParam("projectId") UUID projectId) {
 
-      Arrays.asList(files)
-         .stream()
+      Arrays.stream(files)
          .forEach(file -> {
             try {
-               projectsService.savePicture(file, "uuid");
+               projectsService.saveToGallery(file, projectId.toString());
             } catch (IOException e) {
                throw new RuntimeException(e);
             }
