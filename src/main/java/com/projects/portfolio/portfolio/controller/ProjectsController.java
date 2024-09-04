@@ -56,11 +56,6 @@ public class ProjectsController {
          projectDetails);
    }
 
-   @GetMapping(value = "/details/{id}/profile", produces = MediaType.IMAGE_JPEG_VALUE)
-   public Resource getProfileImage(@PathVariable UUID id) throws IOException {
-      return projectsService.getProfileImage(id);
-   }
-
    @Profile("DEV")
    @PostMapping
    public ResponseEntityDTO<ProjectWithDetailsDTO> saveProject(@Validated @RequestBody ProjectWithDetailsDTO projectWithDetails) {

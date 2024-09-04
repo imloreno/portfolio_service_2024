@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8
+    container_name: mysql-db
+    ports:
+      - "4444:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: test_database
+      MYSQL_ROOT_PASSWORD: Amadeus1
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+    db:
+      driver: local

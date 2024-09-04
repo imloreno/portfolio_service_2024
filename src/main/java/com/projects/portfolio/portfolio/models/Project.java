@@ -44,5 +44,6 @@ public class Project implements Serializable {
    Set<Skills> skills;
 
    @OneToMany(mappedBy="project")
+   @JsonIgnore
    private Set<ProjectGallery> gallery;
 }

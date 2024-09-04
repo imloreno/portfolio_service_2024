@@ -2,11 +2,14 @@ package com.projects.portfolio.portfolio.services;
 
 import com.projects.portfolio.portfolio.constants.FileCons;
 import com.projects.portfolio.portfolio.constants.ProjectConst;
+import com.projects.portfolio.portfolio.helpers.FileHelpers;
 import com.projects.portfolio.portfolio.models.Project;
 import com.projects.portfolio.portfolio.models.ProjectDetails;
+import com.projects.portfolio.portfolio.models.ProjectGallery;
 import com.projects.portfolio.portfolio.models.Skills;
 import com.projects.portfolio.portfolio.models.dto.ProjectWithDetailsDTO;
 import com.projects.portfolio.portfolio.repository.ProjectDetailsRepository;
+import com.projects.portfolio.portfolio.repository.ProjectGalleryRepository;
 import com.projects.portfolio.portfolio.repository.ProjectRepository;
 import com.projects.portfolio.portfolio.repository.SkillsRepository;
 import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAdapter;
@@ -27,199 +30,153 @@ import java.util.*;
 @Service
 public class ProjectsService {
 
-   @Autowired
-   ProjectRepository projectRepository;
+    @Autowired
+    ProjectRepository projectRepository;
 
-   @Autowired
-   ProjectDetailsRepository projectDetailsRepository;
+    @Autowired
+    ProjectDetailsRepository projectDetailsRepository;
 
-   @Autowired
-   SkillsRepository skillsRepository;
+    @Autowired
+    SkillsRepository skillsRepository;
 
-   @Autowired
-   StorageAdapter storageAdapter;
+    @Autowired
+    StorageAdapter storageAdapter;
 
-   @Value("${files.base-dir}")
-   private String baseDir;
+    @Autowired
+    ProjectGalleryRepository projectGalleryRepository;
 
-   Logger logger = LoggerFactory.getLogger(ProjectsService.class);
+    @Value("${files.base-dir}")
+    private String baseDir;
 
-   public List<Project> getProjects() {
-      return projectRepository.findAll();
-   }
+    Logger logger = LoggerFactory.getLogger(ProjectsService.class);
 
-   @Transactional
-   public ProjectWithDetailsDTO saveProject(ProjectWithDetailsDTO projectWithDetails) {
-      Project project = new Project();
-      project.setName(projectWithDetails.getName());
-      project.setPosition(projectWithDetails.getPosition());
-      project.setType(projectWithDetails.getType());
-      project.setFrom(projectWithDetails.getFrom());
-      project.setTo(projectWithDetails.getTo());
-      project.setSkills(validateSkills(projectWithDetails.getSkills()));
+    public List<Project> getProjects() {
+        return projectRepository.findAll();
+    }
 
-      try {
-         // Save the project in the database
-         project = projectRepository.save(project);
-         logger.info("Project saved successfully: {}", project.getId());
-      } catch (Exception e) {
-         logger.error(e.getMessage());
-         throw new RuntimeException("Error saving project");
-      }
+    @Transactional
+    public ProjectWithDetailsDTO saveProject(ProjectWithDetailsDTO projectWithDetails) {
+        Project project = new Project();
+        project.setName(projectWithDetails.getName());
+        project.setPosition(projectWithDetails.getPosition());
+        project.setType(projectWithDetails.getType());
+        project.setFrom(projectWithDetails.getFrom());
+        project.setTo(projectWithDetails.getTo());
+        project.setSkills(validateSkills(projectWithDetails.getSkills()));
 
-      try {
-         // Fill the project details
-         ProjectDetails projectDetails = new ProjectDetails();
-         projectDetails.setDescription(projectWithDetails.getDescription());
-         projectDetails.setGithub(projectWithDetails.getGithub());
-         projectDetails.setLink(projectWithDetails.getLink());
-         projectDetails.setProjects(project);
+        try {
+            // Save the project in the database
+            project = projectRepository.save(project);
+            logger.info("Project saved successfully: {}", project.getId());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException("Error saving project");
+        }
 
-         // Save the project details in the database
-         projectDetailsRepository.save(projectDetails);
-         logger.info("Project details saved successfully");
-      } catch (Exception e) {
-         logger.error(e.getMessage());
-         throw new RuntimeException("Error saving project details");
-      }
+        try {
+            // Fill the project details
+            ProjectDetails projectDetails = new ProjectDetails();
+            projectDetails.setDescription(projectWithDetails.getDescription());
+            projectDetails.setGithub(projectWithDetails.getGithub());
+            projectDetails.setLink(projectWithDetails.getLink());
+            projectDetails.setProjects(project);
 
-      projectWithDetails.setId(project.getId());
-      return projectWithDetails;
-   }
+            // Save the project details in the database
+            projectDetailsRepository.save(projectDetails);
+            logger.info("Project details saved successfully");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException("Error saving project details");
+        }
 
-   @Transactional ProjectWithDetailsDTO updateProject(ProjectWithDetailsDTO projectWithDetails, MultipartFile file) {
-      Project project = projectRepository.findById(projectWithDetails.getId())
-         .orElseThrow(() -> new RuntimeException("Project not found"));
+        projectWithDetails.setId(project.getId());
+        return projectWithDetails;
+    }
 
-      project.setName(projectWithDetails.getName());
-      project.setPosition(projectWithDetails.getPosition());
-      project.setType(projectWithDetails.getType());
-      project.setFrom(projectWithDetails.getFrom());
-      project.setTo(projectWithDetails.getTo());
+    @Transactional
+    ProjectWithDetailsDTO updateProject(ProjectWithDetailsDTO projectWithDetails, MultipartFile file) {
+        Project project = projectRepository.findById(projectWithDetails.getId())
+                .orElseThrow(() -> new RuntimeException("Project not found"));
 
-      try {
-         // Save the project in the database
-         project = projectRepository.save(project);
-      } catch (Exception e) {
-         throw new RuntimeException("Error saving project");
-      }
+        project.setName(projectWithDetails.getName());
+        project.setPosition(projectWithDetails.getPosition());
+        project.setType(projectWithDetails.getType());
+        project.setFrom(projectWithDetails.getFrom());
+        project.setTo(projectWithDetails.getTo());
 
-      try {
-         // Fill the project details
-         ProjectDetails projectDetails = projectDetailsRepository.findById(project.getId())
-            .orElseThrow(() -> new RuntimeException("Project details not found"));
+        try {
+            // Save the project in the database
+            project = projectRepository.save(project);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving project");
+        }
 
-         projectDetails.setDescription(projectWithDetails.getDescription());
-         projectDetails.setGithub(projectWithDetails.getGithub());
-         projectDetails.setLink(projectWithDetails.getLink());
-         projectDetails.setId(project.getId());
+        try {
+            // Fill the project details
+            ProjectDetails projectDetails = projectDetailsRepository.findById(project.getId())
+                    .orElseThrow(() -> new RuntimeException("Project details not found"));
 
-         // Save the project details in the database
-         projectDetailsRepository.save(projectDetails);
-      } catch (Exception e) {
-         throw new RuntimeException("Error saving project details");
-      }
+            projectDetails.setDescription(projectWithDetails.getDescription());
+            projectDetails.setGithub(projectWithDetails.getGithub());
+            projectDetails.setLink(projectWithDetails.getLink());
+            projectDetails.setId(project.getId());
 
-      return projectWithDetails;
-   }
+            // Save the project details in the database
+            projectDetailsRepository.save(projectDetails);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving project details");
+        }
 
-   @Transactional
-   public String savePicture(MultipartFile file, String projectId) throws IOException {
-      // Converting the MultipartFile to a File
-      File fileConverted = FileHandlers.convertMultipartFileToFile(file);
+        return projectWithDetails;
+    }
 
-      // Define the relative path
-      String relativePath = FileCons.PROJECTS_PATH.concat(projectId).concat("/").concat(FileCons.IMAGES_PATH);
+    @Transactional
+    public String savePicture(MultipartFile file, String projectId) throws IOException {
+        // Converting the MultipartFile to a File
+        File fileConverted = FileHandlers.convertMultipartFileToFile(file);
 
-      // Define the target project
-      Optional<Project> targetProject;
+        // Define the relative path
+        String relativePath = FileCons.PROJECTS_PATH.concat(projectId).concat("/").concat(FileCons.IMAGES_PATH);
 
-      // Save the file to the file system and update the Project picture attribute
-      try {
-         // Saving the file to the file system
-         storageAdapter.uploadFile(fileConverted, file.getOriginalFilename(), baseDir.concat(relativePath));
+        // Define the target project
+        Optional<Project> targetProject;
 
-         // After saving the file, update the project picture attribute
-         targetProject = projectRepository.findById(UUID.fromString(projectId));
-         if (targetProject.isPresent()) {
-            targetProject.get().setPicture(relativePath.concat(
-               Objects.requireNonNull(file.getOriginalFilename())
-            ));
-            projectRepository.save(targetProject.get());
-         }
+        // Save the file to the file system and update the Project picture attribute
+        try {
+            // Saving the file to the file system
+            storageAdapter.uploadFile(fileConverted, file.getOriginalFilename(), baseDir.concat(relativePath));
 
-      } catch (Exception e) {
-         throw new RuntimeException("Error saving the picture");
-      }
-
-      return targetProject.get().getPicture();
-   }
-
-   @Transactional
-   public String saveToGallery(MultipartFile file, String projectId) throws IOException {
-      // Converting the MultipartFile to a File
-      File fileConverted = FileHandlers.convertMultipartFileToFile(file);
-
-      // Define the relative path
-      String relativePath = FileCons.GALLERY_FULL_PATH
-         .replace(FileCons.ID_SUFIX, projectId.toString());
-
-      // Define the target project
-      Optional<Project> targetProject;
-
-      // Save the file to the file system and update the Project picture attribute
-      try {
-         // Saving the file to the file system
-         storageAdapter.uploadFile(fileConverted, file.getOriginalFilename(), baseDir.concat(relativePath));
-
-         // After saving the file, update the project picture attribute
-         targetProject = projectRepository.findById(UUID.fromString(projectId));
-         if (targetProject.isPresent()) {
-            targetProject.get().setPicture(relativePath.concat(
-               Objects.requireNonNull(file.getOriginalFilename())
-            ));
-            projectRepository.save(targetProject.get());
-         }
-
-      } catch (Exception e) {
-         throw new RuntimeException("Error saving the picture");
-      }
-
-      return targetProject.get().getPicture();
-   }
-
-   public Resource getProfileImage(UUID id) throws IOException {
-
-      // Check if the project exists
-      Project project = projectRepository.findById(id)
-         .orElseThrow(() -> new RuntimeException("Project ID not valid: ".concat(id.toString())));
-
-      // Define the path to the image
-      String path = baseDir.concat(project.getPicture());
-      Resource resource = storageAdapter.getInputStream(path);
-
-      if (resource == null) {
-         throw new RuntimeException("Image not found");
-      }
-
-      return resource;
-   }
-
-   @Transactional
-   private Set<Skills> validateSkills(List<String> skills) {
-      Set<Skills> validSkills = new HashSet<>();
-
-      // Check if the skills are valid
-      for (String skill : skills) {
-         if (!skill.isEmpty() || ProjectConst.containsSkill(skill)) {
-            // Find a skill by name and add it to the list
-            Skills tempSkill = skillsRepository.findByName(skill);
-            if (tempSkill != null) {
-               validSkills.add(tempSkill);
+            // After saving the file, update the project picture attribute
+            targetProject = projectRepository.findById(UUID.fromString(projectId));
+            if (targetProject.isPresent()) {
+                targetProject.get().setPicture(relativePath.concat(
+                        Objects.requireNonNull(file.getOriginalFilename())
+                ));
+                projectRepository.save(targetProject.get());
             }
-         }
-      }
 
-      return validSkills;
-   }
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving the picture");
+        }
+
+        return targetProject.get().getPicture();
+    }
+
+    @Transactional
+    private Set<Skills> validateSkills(List<String> skills) {
+        Set<Skills> validSkills = new HashSet<>();
+
+        // Check if the skills are valid
+        for (String skill : skills) {
+            if (!skill.isEmpty() || ProjectConst.containsSkill(skill)) {
+                // Find a skill by name and add it to the list
+                Skills tempSkill = skillsRepository.findByName(skill);
+                if (tempSkill != null) {
+                    validSkills.add(tempSkill);
+                }
+            }
+        }
+
+        return validSkills;
+    }
 }

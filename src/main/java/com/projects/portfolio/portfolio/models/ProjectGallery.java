@@ -1,5 +1,6 @@
 package com.projects.portfolio.portfolio.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,11 @@ public class ProjectGallery implements Serializable {
    @GeneratedValue(strategy = GenerationType.AUTO)
    public UUID id;
 
+   @Column
+   private String name;
+
    @ManyToOne
+   @JsonIgnore
    @JoinColumn(name="project_id", nullable=false)
    private Project project;
 }
