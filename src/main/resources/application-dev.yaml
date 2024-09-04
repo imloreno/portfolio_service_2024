@@ -13,4 +13,4 @@ spring:
       ddl-auto: update
 
 files:
-  base-dir: C:/ProgramData/temp/
+  base-dir: C:/ProgramData/temp/portfolio_2024
