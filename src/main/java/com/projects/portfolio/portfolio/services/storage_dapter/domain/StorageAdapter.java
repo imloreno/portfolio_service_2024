@@ -1,10 +1,12 @@
 package com.projects.portfolio.portfolio.services.storage_dapter.domain;
 
-import com.amazonaws.services.s3.model.S3Object;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+
+import java.io.File;
+import java.io.IOException;
 
 public interface StorageAdapter {
-   public void uploadFile(MultipartFile file, String fileName, String path);
-
-   public S3Object getFile(String fileName, String path);
+   boolean uploadFile(File file, String fileName, String path) throws IOException;
+   Resource getInputStream(String path) throws IOException;
+   boolean deleteFile(String fileName, String path);
 }

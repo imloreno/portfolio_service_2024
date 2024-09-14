@@ -1,0 +1,21 @@
+environment:
+  name: PROD
+server:
+  port : 1998
+spring:
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowMultiQueries=true
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+files:
+  base-dir: /
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  bucket-name: ${AWS_BUCKET-NAME}
+  region: ${AWS_REGION}
