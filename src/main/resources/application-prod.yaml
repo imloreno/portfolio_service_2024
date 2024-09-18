@@ -14,7 +14,7 @@ spring:
     hibernate:
       ddl-auto: none
 files:
-  base-dir: /
+  base-dir: portfolio_2024
 
 aws:
   access-key: ${AWS_ACCESS_KEY}
