@@ -1,11 +1,12 @@
 environment:
   name: PROD
 server:
-  port : 1998
+  port: 1998
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowMultiQueries=true&allowPublicKeyRetrieval=true
-    jdbcUrl: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowMultiQueries=true&allowPublicKeyRetrieval=true
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
   jpa:
