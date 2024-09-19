@@ -4,19 +4,17 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.projects.portfolio.portfolio.services.storage_dapter.domain.StorageAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Service
 @Profile("PROD")
@@ -55,7 +53,16 @@ public class S3 implements StorageAdapter {
    }
 
    @Override
-   public Resource getInputStream(String path) throws IOException {
-      return null;
+   public Resource getInputStream(String objectKey) {
+      S3Object s3Object = s3Client.getObject(bucketName, objectKey);
+      Resource resource;
+
+      try {
+         resource = new InputStreamResource(s3Object.getObjectContent());
+      } catch (Exception e) {
+         logger.error("Error getting file ".concat(objectKey).concat(" from bucket ").concat(bucketName));
+         return null;
+      }
+      return resource;
    }
 }
